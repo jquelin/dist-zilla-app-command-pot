@@ -19,15 +19,9 @@ distribution modules.";
 sub opt_spec {
     my $self = shift;
 
-    # try to find existing messages.pot
-    my $potfile;
-    dir()->recurse( callback => sub {
-        my $file = shift;
-        $potfile = $file->stringify if $file =~ /messages.pot$/;
-    } );
     return (
         [],
-        [ "--potfile|p", "location of the messages.pot to update", $potfile ]
+        [ "--potfile|p", "location of the messages.pot to update" ]
     );
 }
 
@@ -50,15 +44,26 @@ sub execute {
 
     # no messages.pot found, prompting user
     if ( not defined $opts->{potfile} ) {
-        $zilla->log( "No messages.pot found - enter your own." );
-
-        my $default = "lib/LocaleData/$dist-messages.pot";
-        $opts->{potfile} = prompt( "messages.pot to use: ", -d => $default );
+        # try to find existing messages.pot
+        $zilla->log( "Trying to find a messages.pot file...");
+        ($opts->{potfile}) =
+            map  { $_->name }
+            grep { $_->name =~ /messages\.pot$/ }
+            grep { $_->isa( "Dist::Zilla::File::OnDisk" ) }
+            $zilla->files->flatten;
+        if ( defined $opts->{potfile} ) {
+            $zilla->log( "Found [$opts->{potfile}]" );
+        } else {
+            $zilla->log( "No messages.pot found - enter your own." );
+            my $default = "lib/LocaleData/$dist-messages.pot";
+            $opts->{potfile} = prompt( "messages.pot to use: ", -d => $default );
+        }
     }
 
     # update pot file
     unlink $opts->{potfile};
     file($opts->{potfile})->parent->mkpath;
+    $zilla->log( "Running xgettext..." );
     system(
         "xgettext",
         "--keyword=T",
