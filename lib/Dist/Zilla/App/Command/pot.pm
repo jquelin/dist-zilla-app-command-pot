@@ -3,10 +3,40 @@ use strict;
 use warnings;
 
 package Dist::Zilla::App::Command::pot;
-# ABSTRACT:
+# ABSTRACT: update i18n messages.pot file with new strings
+
+use Dist::Zilla::App -command;
+use File::Temp qw{ tempfile };
+use Path::Class;
+
+sub description {
+"Update the messages.pot file with new i18n strings found in the
+distribution modules.";
+}
+
+sub opt_spec {
+    my $self = shift;
+    return (
+    );
+}
+
+sub execute {
+}
 
 1;
 __END__
+
+=head1 SYNOPSIS
+
+    $ dzil pot -m lib/LocaleData/Foo-Bar-messages.pot
+    $ dzil pot
+
+
+=head1 DESCRIPTION
+
+This command will update the messages file used for internationalization
+purposes, collecting all the new strings since last invocation.
+
 
 =head1 SEE ALSO
 
@@ -35,5 +65,4 @@ L<http://annocpan.org/dist/Dist-Zilla-App-Command-pot>
 L<http://cpanratings.perl.org/d/Dist-Zilla-App-Command-pot>
 
 =back
-
 
