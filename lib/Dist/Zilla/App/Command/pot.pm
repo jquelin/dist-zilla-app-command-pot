@@ -21,6 +21,21 @@ sub opt_spec {
 }
 
 sub execute {
+    my ($self, $opts, $args) = @_;
+
+    # build list of perl modules from where to extract strings
+    my @pmfiles;
+    dir("lib")->recurse( callback => sub {
+        my $file = shift;
+        push @pmfiles, $file if $file =~ /\.pm$/;
+    } );
+
+    # store this list
+    my $tmp = File::Temp->new( UNLINK=>1 );
+    $tmp->print( map { "$_\n" } @pmfiles );
+    $tmp->close;
+
+
 }
 
 1;
