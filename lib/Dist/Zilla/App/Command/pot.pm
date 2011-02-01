@@ -7,6 +7,7 @@ package Dist::Zilla::App::Command::pot;
 
 use Dist::Zilla::App -command;
 use File::Temp qw{ tempfile };
+use IO::Prompt;
 use Path::Class;
 
 sub description {
@@ -16,12 +17,22 @@ distribution modules.";
 
 sub opt_spec {
     my $self = shift;
+
+    # try to find existing messages.pot
+    my $potfile;
+    dir()->recurse( callback => sub {
+        my $file = shift;
+        $potfile = $file if $file =~ /messages.pot$/;
+    } );
     return (
+        [],
+        [ "--messages|m", "location of the messages.pot to update", $potfile ]
     );
 }
 
 sub execute {
     my ($self, $opts, $args) = @_;
+    $self->zilla->build;
 
     # build list of perl modules from where to extract strings
     my @pmfiles;
@@ -34,6 +45,16 @@ sub execute {
     my $tmp = File::Temp->new( UNLINK=>1 );
     $tmp->print( map { "$_\n" } @pmfiles );
     $tmp->close;
+
+    #
+    if ( not defined $opts->{potfile} ) {
+        say "No messages.pot found.";
+
+        my $dist = $self->zilla->distmeta->{name};
+        my $default = "lib/LocaleData/$dist-messages.pot";
+
+        $opts->{potfile} = prompt( "messages.pot to use [$default]: ", -d => $default );
+    }
 
 
 }
