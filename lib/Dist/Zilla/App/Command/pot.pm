@@ -36,6 +36,8 @@ sub execute {
 
     my $zilla = $self->zilla;
     $zilla->build;
+    my $dist = $self->zilla->distmeta->{name};
+    my $copy = $self->zilla->distmeta->{author}->[0];
 
     # build list of perl modules from where to extract strings
     my @pmfiles =
@@ -50,12 +52,22 @@ sub execute {
     if ( not defined $opts->{potfile} ) {
         $zilla->log( "No messages.pot found - enter your own." );
 
-        my $dist = $self->zilla->distmeta->{name};
         my $default = "lib/LocaleData/$dist-messages.pot";
         $opts->{potfile} = prompt( "messages.pot to use: ", -d => $default );
     }
 
-
+    # update pot file
+    unlink $opts->{potfile};
+    file($opts->{potfile})->parent->mkpath;
+    system(
+        "xgettext",
+        "--keyword=T",
+        "--from-code=utf-8",
+        "--package-name=$dist",
+        "--copyright-holder='$copy'",
+        "-o", $opts->{potfile},
+        "-f", $tmp
+    ) == 0 or die "xgettext exited with return code " . ($? >> 8);
 }
 
 1;
