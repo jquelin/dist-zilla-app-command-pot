@@ -8,6 +8,7 @@ package Dist::Zilla::App::Command::pot;
 use Dist::Zilla::App -command;
 use File::Temp qw{ tempfile };
 use IO::Prompt;
+use Moose::Autobox;
 use Path::Class;
 
 sub description {
@@ -22,38 +23,36 @@ sub opt_spec {
     my $potfile;
     dir()->recurse( callback => sub {
         my $file = shift;
-        $potfile = $file if $file =~ /messages.pot$/;
+        $potfile = $file->stringify if $file =~ /messages.pot$/;
     } );
     return (
         [],
-        [ "--messages|m", "location of the messages.pot to update", $potfile ]
+        [ "--potfile|p", "location of the messages.pot to update", $potfile ]
     );
 }
 
 sub execute {
     my ($self, $opts, $args) = @_;
-    $self->zilla->build;
+
+    my $zilla = $self->zilla;
+    $zilla->build;
 
     # build list of perl modules from where to extract strings
-    my @pmfiles;
-    dir("lib")->recurse( callback => sub {
-        my $file = shift;
-        push @pmfiles, $file if $file =~ /\.pm$/;
-    } );
-
-    # store this list
+    my @pmfiles =
+        grep { $_->name =~ /\.pm$/ }
+        grep { $_->isa( "Dist::Zilla::File::OnDisk" ) }
+        $zilla->files->flatten;
     my $tmp = File::Temp->new( UNLINK=>1 );
-    $tmp->print( map { "$_\n" } @pmfiles );
+    $tmp->print( map { $_->name . "\n" } @pmfiles );
     $tmp->close;
 
-    #
+    # no messages.pot found, prompting user
     if ( not defined $opts->{potfile} ) {
-        say "No messages.pot found.";
+        $zilla->log( "No messages.pot found - enter your own." );
 
         my $dist = $self->zilla->distmeta->{name};
         my $default = "lib/LocaleData/$dist-messages.pot";
-
-        $opts->{potfile} = prompt( "messages.pot to use [$default]: ", -d => $default );
+        $opts->{potfile} = prompt( "messages.pot to use: ", -d => $default );
     }
 
 
@@ -64,7 +63,7 @@ __END__
 
 =head1 SYNOPSIS
 
-    $ dzil pot -m lib/LocaleData/Foo-Bar-messages.pot
+    $ dzil pot -p lib/LocaleData/Foo-Bar-messages.pot
     $ dzil pot
 
 
