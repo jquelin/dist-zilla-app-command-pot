@@ -21,7 +21,7 @@ sub opt_spec {
 
     return (
         [],
-        [ "--potfile|p", "location of the messages.pot to update" ]
+        [ "potfile|p=s", "location of the messages.pot to update" ]
     );
 }
 
