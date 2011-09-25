@@ -1,8 +1,19 @@
+#
+# This file is part of Dist-Zilla-App-Command-pot
+#
+# This software is copyright (c) 2011 by Jerome Quelin.
+#
+# This is free software; you can redistribute it and/or modify it under
+# the same terms as the Perl 5 programming language system itself.
+#
 use 5.012;
 use strict;
 use warnings;
 
 package Dist::Zilla::App::Command::pot;
+{
+  $Dist::Zilla::App::Command::pot::VERSION = '1.112680';
+}
 # ABSTRACT: update i18n messages.pot file with new strings
 
 use Dist::Zilla::App -command;
@@ -80,19 +91,27 @@ sub execute {
 }
 
 1;
-__END__
+
+
+=pod
+
+=head1 NAME
+
+Dist::Zilla::App::Command::pot - update i18n messages.pot file with new strings
+
+=head1 VERSION
+
+version 1.112680
 
 =head1 SYNOPSIS
 
     $ dzil pot -p lib/LocaleData/Foo-Bar-messages.pot
     $ dzil pot
 
-
 =head1 DESCRIPTION
 
 This command will update the messages file used for internationalization
 purposes, collecting all the new strings since last invocation.
-
 
 =head1 SEE ALSO
 
@@ -121,4 +140,20 @@ L<http://annocpan.org/dist/Dist-Zilla-App-Command-pot>
 L<http://cpanratings.perl.org/d/Dist-Zilla-App-Command-pot>
 
 =back
+
+=head1 AUTHOR
+
+Jerome Quelin <jquelin@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Jerome Quelin.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
+__END__
 
