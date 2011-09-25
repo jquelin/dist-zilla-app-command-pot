@@ -70,6 +70,7 @@ sub execute {
     system(
         "xgettext",
         "--keyword=T",
+        "--keyword=__",
         "--from-code=utf-8",
         "--package-name=$dist",
         "--copyright-holder='$copy'",
