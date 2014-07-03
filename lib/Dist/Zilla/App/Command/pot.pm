@@ -22,7 +22,7 @@ sub opt_spec {
     return (
         [],
         [ "output|o=s", "location of the messages.pot to update" ],
-        [ "input|i=s@", "location of the messages.pot to update" ],
+        [ "input|i=s@", "input file(s) (defaults to all .pm files)" ],
     );
 }
 
