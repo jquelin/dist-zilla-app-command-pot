@@ -84,7 +84,7 @@ __END__
 
 =head1 SYNOPSIS
 
-    $ dzil pot -p lib/LocaleData/Foo-Bar-messages.pot
+    $ dzil pot -o lib/LocaleData/Foo-Bar-messages.pot
     $ dzil pot
 
 
