@@ -39,8 +39,9 @@ sub execute {
         grep { $_->name =~ /\.pm$/ }
         grep { $_->isa( "Dist::Zilla::File::OnDisk" ) }
         $zilla->files->flatten;
-    @pmfiles = grep { $_->_original_name ~~ @{ $opts->{input} } } @pmfiles
-        if $opts->{input};
+
+    @pmfiles = $self->_filter_input_files($opts->{input}, @pmfiles);
+
     my $tmp = File::Temp->new( UNLINK=>1 );
     $tmp->print( map { $_->name . "\n" } @pmfiles );
     $tmp->close;
@@ -77,6 +78,15 @@ sub execute {
         "-o", $opts->{output},
         "-f", $tmp
     ) == 0 or die "xgettext exited with return code " . ($? >> 8);
+}
+
+sub _filter_input_files {
+  my ($self, $input, @pmfiles) = @_;
+
+  return @pmfiles unless $input && @$input;
+
+  my %filter = map { ($_ => 1) } @$input;
+  return grep { $filter{ $_->_original_name } } @pmfiles;
 }
 
 1;
