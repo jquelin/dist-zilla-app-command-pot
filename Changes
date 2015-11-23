@@ -2,6 +2,8 @@ Changelog for Dist-Zilla-App-Command-pot
 
 {{$NEXT}}
 
+2.000     2015-11-23 15:20:43+01:00 Europe/Paris
+
 1.112680  2011-09-25 16:41:50 Europe/Paris
  - new keyword recognized: __()
  - new option --input
