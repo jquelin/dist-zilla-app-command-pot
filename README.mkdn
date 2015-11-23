@@ -1,0 +1,52 @@
+# NAME
+
+Dist::Zilla::App::Command::pot - update i18n messages.pot file with new strings
+
+# VERSION
+
+version 2.000
+
+# SYNOPSIS
+
+    $ dzil pot -o lib/LocaleData/Foo-Bar-messages.pot
+    $ dzil pot
+
+# DESCRIPTION
+
+This command will update the messages file used for internationalization
+purposes, collecting all the new strings since last invocation.
+
+# SEE ALSO
+
+You can find more information on this module at:
+
+- Search CPAN
+
+    [http://search.cpan.org/dist/Dist-Zilla-App-Command-pot](http://search.cpan.org/dist/Dist-Zilla-App-Command-pot)
+
+- See open / report bugs
+
+    [http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-App-Command-pot](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-App-Command-pot)
+
+- Git repository
+
+    [http://github.com/jquelin/dist-zilla-app-command-pot](http://github.com/jquelin/dist-zilla-app-command-pot)
+
+- AnnoCPAN: Annotated CPAN documentation
+
+    [http://annocpan.org/dist/Dist-Zilla-App-Command-pot](http://annocpan.org/dist/Dist-Zilla-App-Command-pot)
+
+- CPAN Ratings
+
+    [http://cpanratings.perl.org/d/Dist-Zilla-App-Command-pot](http://cpanratings.perl.org/d/Dist-Zilla-App-Command-pot)
+
+# AUTHOR
+
+Jerome Quelin &lt;jquelin@gmail.com>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Jerome Quelin.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
